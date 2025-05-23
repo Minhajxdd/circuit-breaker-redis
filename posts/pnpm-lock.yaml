@@ -8,22 +8,22 @@ importers:
 
   .:
     dependencies:
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
+    devDependencies:
       '@types/express':
         specifier: ^5.0.2
         version: 5.0.2
       '@types/node':
         specifier: ^22.15.21
         version: 22.15.21
-      express:
-        specifier: ^5.1.0
-        version: 5.1.0
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-    devDependencies:
       tsx:
         specifier: ^4.19.4
         version: 4.19.4
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
 
 packages:
 
