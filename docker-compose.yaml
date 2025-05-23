@@ -11,5 +11,16 @@ services:
       - '3000:3000'
     volumes:
       - ./gateway:/app
-      # - /app/node_modules
+    restart: always
+
+  posts:
+    build:
+      context: ./posts
+      dockerfile: Dockerfile
+    container_name: posts
+    env_file: ./posts/.env
+    ports:
+      - '3001:3000'
+    volumes:
+      - ./posts:/app
     restart: always
