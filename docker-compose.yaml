@@ -6,6 +6,7 @@ services:
       context: ./gateway
       dockerfile: Dockerfile
     container_name: gateway
+    env_file: ./gateway/.env
     ports:
       - '3000:3000'
     volumes:
