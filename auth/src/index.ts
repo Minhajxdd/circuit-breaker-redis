@@ -4,8 +4,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.all('/posts/done', (req, res) => {
-  res.send('post created');
+app.all('/auth', (req, res) => {
+  res.send('auth service');
 })
 
 app.listen(PORT, () => {

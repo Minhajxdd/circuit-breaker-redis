@@ -13,6 +13,18 @@ services:
       - ./gateway:/app
     restart: always
 
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: auth
+    env_file: ./auth/.env
+    ports:
+      - '3002:3000'
+    volumes:
+      - ./auth:/app
+    restart: always
+
   posts:
     build:
       context: ./posts
@@ -24,3 +36,32 @@ services:
     volumes:
       - ./posts:/app
     restart: always
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgress
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmin_data:
