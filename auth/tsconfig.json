@@ -11,6 +11,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "moduleDetection": "force",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }
