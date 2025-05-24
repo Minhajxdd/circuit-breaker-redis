@@ -4,6 +4,7 @@ import validateEnv from "./config/validate-env";
 import { authenticateDbConnection } from "./config/database";
 import AuthRouter from './routes/auth.route';
 import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError } from "./errors/not-found-error";
 
 const app = express();
 
@@ -17,6 +18,10 @@ const app = express();
 
 // routing requests
 app.use('/auth', AuthRouter);
+
+app.all("/{*any}", () => {
+  throw new NotFoundError();
+});
 
 app.use(errorHandler);
 
