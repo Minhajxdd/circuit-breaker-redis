@@ -22,6 +22,7 @@ async function authenticateDbConnection() {
   try {
     await sequelize.authenticate();
     console.log("Database Connection has been established successfully.");
+    await sequelize.sync({ force: true });
   } catch (err: any) {
     console.log(err.message);
   }

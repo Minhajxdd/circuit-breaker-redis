@@ -2,6 +2,7 @@ import express from "express";
 
 import {authenticateDbConnection} from './config/database';
 import validateEnv from './config/validate-env';
+import User from "./database/models/user.model";
 
 // validating environment variables
 validateEnv();
