@@ -2,13 +2,10 @@
 const ROUTES = [
     {
         url: '/posts',
-        authServices: [],
+        middlewares: [],
         proxy: {
-            target: "https://jsonplaceholder.typicode.com",
+            target: process.env.POSTS_SERVICE_URL,
             changeOrigin: true,
-            pathRewrite: {
-                [`^/api`]: '',
-            },
         }
     },
 ]

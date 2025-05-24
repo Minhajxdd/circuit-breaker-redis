@@ -3,14 +3,14 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 
 type Route = {
     url: string;
-    authServices: RequestHandler[];
+    middlewares: RequestHandler[];
     proxy: Parameters<typeof createProxyMiddleware>[0];
 };
 
 const proxy = {
     setupProxy: (app: Application, routes: Route[]) => {
-        routes.forEach((route) => {
-            app.use(route.url, route.authServices, createProxyMiddleware(route.proxy));
+        routes.forEach(({url, proxy, middlewares}) => {
+            app.use(`/api`+url, middlewares, createProxyMiddleware(proxy));
         });
     }
 };
