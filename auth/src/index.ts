@@ -1,25 +1,7 @@
-import express from "express";
-
-import { authenticateDbConnection } from "./config/database";
-import validateEnv from "./config/validate-env";
-import User from "./database/models/user.model";
-
-(async function () {
-  // validating environment variables
-  validateEnv();
-
-  // validating db connection
-  await authenticateDbConnection();
-})();
-
-const app = express();
+import app from './app.js';
 
 const PORT = process.env.PORT || 3000;
 
-app.all("/auth", (req, res) => {
-  res.send("auth service");
-});
-
 app.listen(PORT, () => {
-  console.log(`Server started at port: ${PORT}`);
+  console.log(`Auth Server started at port: ${PORT}`);
 });
