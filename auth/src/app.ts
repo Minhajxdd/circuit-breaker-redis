@@ -3,6 +3,7 @@ import express from "express";
 import validateEnv from "./config/validate-env";
 import { authenticateDbConnection } from "./config/database";
 import AuthRouter from './routes/auth.route';
+import { errorHandler } from "./middlewares/error-handler";
 
 const app = express();
 
@@ -17,5 +18,6 @@ const app = express();
 // routing requests
 app.use('/auth', AuthRouter);
 
+app.use(errorHandler);
 
 export default app;
