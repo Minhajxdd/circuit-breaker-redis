@@ -19,4 +19,15 @@ router.post(
   userController.signup
 );
 
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Invalid email address"),
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
+  userController.login
+);
+
 export default router;

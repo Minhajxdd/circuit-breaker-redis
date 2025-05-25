@@ -10,8 +10,12 @@ import { Response } from "express";
 export class AuthService {
   constructor(@inject(TYPES.JwtUtils) private _jwtUtils: JwtUtils) {}
 
-
-  async signUp(res: Response, fullName: string, email: string, password: string) {
+  async signUp(
+    res: Response,
+    fullName: string,
+    email: string,
+    password: string
+  ) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const isEmail = await User.findOne({
@@ -30,15 +34,49 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const token = await this._jwtUtils.generateToken({userId: user.toJSON().id});
+    const token = await this._jwtUtils.generateToken({
+      userId: user.toJSON().id,
+    });
 
-    res.cookie('token', token, {
-      maxAge: 60 * 60 * 1000
+    res.cookie("token", token, {
+      maxAge: 60 * 60 * 1000,
     });
 
     return {
       status: "success",
       message: "successfully signup",
+      user,
+    };
+  }
+
+  async login(res: Response, email: string, password: string) {
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (user == null) {
+      throw new BadRequestError("Invalid email or password");
+    }
+
+    const match = await bcrypt.compare(password, user.toJSON().password);
+
+    if (!match) {
+      throw new BadRequestError("Invalid email or password");
+    }
+
+    const token = await this._jwtUtils.generateToken({
+      userId: user.toJSON().id,
+    });
+
+    res.cookie("token", token, {
+      maxAge: 60 * 60 * 1000,
+    });
+
+    return {
+      status: "success",
+      message: "successfully loggedin",
       user,
     };
   }

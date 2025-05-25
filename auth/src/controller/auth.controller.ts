@@ -18,8 +18,21 @@ export class AuthController {
 
     const { fullName, email, password } = req.body;
 
-    const user = await this._authService.signUp(res, fullName, email, password);
+    const data = await this._authService.signUp(res, fullName, email, password);
 
-    res.send(user);
+    res.send(data);
+  };
+
+  login = async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new RequestValidationError(errors.array());
+    }
+
+    const { email, password } = req.body;
+
+    const data = await this._authService.login(res, email, password);
+
+    res.send(data);
   };
 }
