@@ -18,7 +18,7 @@ export class AuthController {
 
     const { fullName, email, password } = req.body;
 
-    const user = await this._authService.signUp(fullName, email, password);
+    const user = await this._authService.signUp(res, fullName, email, password);
 
     res.send(user);
   };

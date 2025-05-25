@@ -5,11 +5,13 @@ import { authenticateDbConnection } from "./config/database";
 import AuthRouter from './routes/auth.route';
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 (async function () {
   // validating environment variables
