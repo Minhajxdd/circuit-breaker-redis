@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -303,6 +306,10 @@ packages:
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
 
   bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
@@ -1148,6 +1155,8 @@ snapshots:
   at-least-node@1.0.0: {}
 
   balanced-match@1.0.2: {}
+
+  bcryptjs@3.0.2: {}
 
   bluebird@3.7.2: {}
 

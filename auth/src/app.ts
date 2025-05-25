@@ -8,6 +8,9 @@ import { NotFoundError } from "./errors/not-found-error";
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 (async function () {
   // validating environment variables
   validateEnv();
