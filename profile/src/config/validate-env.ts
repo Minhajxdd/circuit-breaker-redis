@@ -5,6 +5,9 @@ const requiredEnvVars = [
   "DB_NAME",
   "DB_HOST",
   "DB_PORT",
+  "REDIS_HOST",
+  "REDIS_PORT",
+  "AUTH_SERVICE"
 ];
 
 export default function validateEnv() {
