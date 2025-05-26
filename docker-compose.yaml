@@ -41,20 +41,6 @@ services:
       - db
     restart: always
 
-  posts:
-    build:
-      context: ./posts
-      dockerfile: Dockerfile
-    container_name: posts
-    env_file: ./posts/.env
-    ports:
-      - '3003:3000'
-    volumes:
-      - ./posts:/app
-    depends_on:
-      - db
-    restart: always
-
   db:
     image: postgres:15-alpine
     container_name: postgress
