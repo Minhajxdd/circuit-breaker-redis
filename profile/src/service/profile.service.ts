@@ -21,22 +21,22 @@ export class ProfileService {
           url: `${
             configuration().services.auth_service
           }/auth/user?userId=${userId}`,
+          timeout: 10000,
         },
         {
           redis,
           serviceId: "auth-service",
           failureThreshold: 3,
-          timeout: 10000,
+          timeout: 3000,
         }
       );
 
-      breaker
-        .fire()
-        .then((data) => resolve(data.data))
-        .catch((err) => {
-          console.log(err.message);
-          throw new Error();
-        });
+      breaker.fire().then((data) => {
+        if (!data?.data?.fullName || !data?.data?.email) {
+          resolve({});
+        }
+        resolve(data.data);
+      });
     });
   }
 
