@@ -24,11 +24,7 @@ export class ProfileController {
 
     const { bio, skills } = req.body;
 
-    console.log(req.user);
-    console.log(userData);
-    console.log(req.body);
-
-
+    
     const data = await this.profileService.createProfile(
       fullName,
       email,

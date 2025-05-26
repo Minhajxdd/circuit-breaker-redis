@@ -12,7 +12,10 @@ router.post(
   "/create",
   [
     body("bio").isString().optional(),
-    body("skills").isArray().withMessage("Skills must be an array of strings."),
+    body("skills")
+      .isArray()
+      .optional()
+      .withMessage("Skills must be an array of strings."),
     body("skills.*").isString().withMessage("Each skill must be a string."),
   ],
   profileController.createProfile

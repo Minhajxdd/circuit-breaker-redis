@@ -23,10 +23,12 @@ export const authenticateToken = (
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req["user"] = decoded;
+    // setting decoded header for consumption of services..
+    req.headers['x-user'] = encodeURIComponent(JSON.stringify(decoded));
 
     next();
   } catch (err) {
+    console.log(err.message)
     return res.status(401).send(err_message);
   }
 };
