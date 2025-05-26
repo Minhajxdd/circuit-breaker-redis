@@ -1,16 +1,18 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 
-import validateEnv from "./config/validate-env";
 import { authenticateDbConnection } from "./config/database";
-import AuthRouter from './routes/auth.route';
+import validateEnv from "./config/validate-env";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
-import cookieParser from 'cookie-parser';
+
+import AuthRouter from "./routes/auth.route";
+import UserRouter from "./routes/user.route";
 
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 (async function () {
@@ -22,7 +24,8 @@ app.use(cookieParser());
 })();
 
 // routing requests
-app.use('/auth', AuthRouter);
+app.use("/auth", UserRouter);
+app.use("/auth", AuthRouter);
 
 app.all("/{*any}", () => {
   throw new NotFoundError();

@@ -5,7 +5,7 @@ import { AuthController } from "../controller/auth.controller";
 import { body } from "express-validator";
 
 const router = Router();
-const userController = container.get<AuthController>(TYPES.AuthController);
+const authController = container.get<AuthController>(TYPES.AuthController);
 
 router.post(
   "/signup",
@@ -16,7 +16,7 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
   ],
-  userController.signup
+  authController.signup
 );
 
 router.post(
@@ -27,7 +27,7 @@ router.post(
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
   ],
-  userController.login
+  authController.login
 );
 
 export default router;
