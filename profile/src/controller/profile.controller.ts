@@ -18,13 +18,14 @@ export class ProfileController {
       throw new RequestValidationError(errors.array());
     }
 
-    const userData = await this.profileService.fetchUserFromAuthService();
+    const userId = req.user?.userId;
+
+    const userData = await this.profileService.fetchUserFromAuthService(userId);
 
     const { fullName, email } = userData;
 
     const { bio, skills } = req.body;
 
-    
     const data = await this.profileService.createProfile(
       fullName,
       email,

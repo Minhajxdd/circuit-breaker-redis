@@ -1,9 +1,10 @@
 import { injectable } from "inversify";
-import Profile from '../database/models/profile.model'
+import Profile from "../database/models/profile.model";
+import { BadRequestError } from "../errors/bad-request-error";
 
 @injectable()
 export class ProfileService {
-  async fetchUserFromAuthService() {
+  async fetchUserFromAuthService(userId: string) {
     return {
       fullName: "Abaad Ahmad",
       email: "abaad@example.com",
@@ -16,14 +17,22 @@ export class ProfileService {
     bio: string,
     skills: string[]
   ) {
-    // Check if email already exists
+    const isEmailExists = await Profile.findOne({
+      where: {
+        email,
+      },
+    });
 
-    // const existing = await Profile.findOne({ where: { email: data.email } });
-    // if (existing) {
-    //   throw new Error("Profile with this email already exists.");
-    // }
+    if (isEmailExists != null) {
+      throw new BadRequestError("Profile Already Exists");
+    }
 
-    // const profile = await Profile.create(data);
-    // return profile;
+    const profile = await Profile.create({ fullName, email, bio, skills });
+
+    return {
+      status: "success",
+      message: "successfully created profile",
+      profile,
+    };
   }
 }
