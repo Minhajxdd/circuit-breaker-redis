@@ -1,10 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Redis } from 'ioredis';
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { Redis } from "ioredis";
 
 export enum CircuitBreakerStates {
   OPENED = "OPENED",
   CLOSED = "CLOSED",
-  HALF = "HALF"
+  HALF = "HALF",
 }
 
 interface CircuitBreakerOptions {
@@ -40,32 +40,38 @@ export class CircuitBreaker {
     const state = await this.redis.hgetall(key);
 
     const circuitState: CircuitBreakerState = {
-      state: (state.state as CircuitBreakerStates) || CircuitBreakerStates.CLOSED,
-      failureCount: parseInt(state.failureCount || '0', 10),
-      resetAfter: parseInt(state.resetAfter || '0', 10)
+      state:
+        (state.state as CircuitBreakerStates) || CircuitBreakerStates.CLOSED,
+      failureCount: parseInt(state.failureCount || "0", 10),
+      resetAfter: parseInt(state.resetAfter || "0", 10),
     };
 
     if (circuitState.state === CircuitBreakerStates.OPENED) {
       if (circuitState.resetAfter <= Date.now()) {
         circuitState.state = CircuitBreakerStates.HALF;
-        await this.redis.hset(key, 'state', CircuitBreakerStates.HALF);
+        await this.redis.hset(key, "state", CircuitBreakerStates.HALF);
       } else {
-        throw new Error('Circuit is in OPEN state. Try again later.'); 
+        throw new Error(
+          `Circuit is OPEN for service: ${
+            this.serviceId
+          }. Retry after: ${new Date(circuitState.resetAfter).toISOString()}`
+        );
       }
     }
 
     try {
       const response: AxiosResponse = await axios(this.request);
-      if (response.status === 200) {
-        return this.success(key, circuitState, response.data);
-      }
-      return this.failure(key, circuitState, response.data);
+      return this.success(key, circuitState, response.data);
     } catch (error: any) {
-      return this.failure(key, circuitState, error?.message || 'Unknown error');
+      return this.failure(key, circuitState, error?.message || "Unknown error");
     }
   }
 
-  private async success(key: string, circuitState: CircuitBreakerState, data: any): Promise<any> {
+  private async success(
+    key: string,
+    circuitState: CircuitBreakerState,
+    data: any
+  ): Promise<any> {
     circuitState.failureCount = 0;
 
     if (circuitState.state === CircuitBreakerStates.HALF) {
@@ -73,14 +79,18 @@ export class CircuitBreaker {
     }
 
     await this.redis.hmset(key, {
-      failureCount: '0',
-      state: circuitState.state
+      failureCount: "0",
+      state: circuitState.state,
     });
 
     return data;
   }
 
-  private async failure(key: string, circuitState: CircuitBreakerState, data: any): Promise<any> {
+  private async failure(
+    key: string,
+    circuitState: CircuitBreakerState,
+    data: any
+  ): Promise<any> {
     circuitState.failureCount += 1;
 
     if (
@@ -93,10 +103,14 @@ export class CircuitBreaker {
       await this.redis.hmset(key, {
         state: circuitState.state,
         resetAfter: circuitState.resetAfter.toString(),
-        failureCount: circuitState.failureCount.toString()
+        failureCount: circuitState.failureCount.toString(),
       });
     } else {
-      await this.redis.hset(key, 'failureCount', circuitState.failureCount.toString());
+      await this.redis.hset(
+        key,
+        "failureCount",
+        circuitState.failureCount.toString()
+      );
     }
 
     return data;
