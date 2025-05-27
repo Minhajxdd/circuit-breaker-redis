@@ -50,8 +50,7 @@ export class CircuitBreaker {
         circuitState.state = CircuitBreakerStates.HALF;
         await this.redis.hset(key, 'state', CircuitBreakerStates.HALF);
       } else {
-        throw new Error('Circuit is in OPEN state. Try again later.');
-        return; 
+        throw new Error('Circuit is in OPEN state. Try again later.'); 
       }
     }
 

@@ -14,7 +14,6 @@ const redis = new Redis({
 @injectable()
 export class ProfileService {
   async fetchUserFromAuthService(userId: string) {
-    return new Promise((resolve, reject) => {
       const breaker = new CircuitBreaker(
         {
           method: "GET",
@@ -31,13 +30,15 @@ export class ProfileService {
         }
       );
 
-      breaker.fire().then((data) => {
+      try {
+        const data = await breaker.fire();
         if (!data?.data?.fullName || !data?.data?.email) {
-          resolve({});
+          return {};
         }
-        resolve(data.data);
-      });
-    });
+        return data.data;
+      } catch (err) {
+        return {};
+      }    
   }
 
   async createProfile(
